@@ -20,15 +20,53 @@ public class PushDataHttpTrigger
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
     {
         //Adjust the path as needed
-        var jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "vBusbarLineOrderDetails.json");
-        if (!System.IO.File.Exists(jsonPath))
-        {
-            return new NotFoundObjectResult("JSON file not found.");
-        }
+        // var jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "vBusbarLineOrderDetails.json");
+        // if (!System.IO.File.Exists(jsonPath))
+        // {
+        //     return new NotFoundObjectResult("JSON file not found.");
+        // }
 
-        var json = await System.IO.File.ReadAllTextAsync(jsonPath);
-        var data = JsonSerializer.Deserialize<List<MfgIdpDemoModel>>(json);
+        // var json = await System.IO.File.ReadAllTextAsync(jsonPath);
+        // //var data = JsonSerializer.Deserialize<GenerateRandomMfgIdpDemoModels(10)>(json);
 
-        return new OkObjectResult(data);
+        return new OkObjectResult(GenerateRandomMfgIdpDemoModels(10));
     }
+    public static List<MfgIdpDemoModel> GenerateRandomMfgIdpDemoModels(int count)
+    {
+        var models = new List<MfgIdpDemoModel>();
+        for (int i = 0; i < count; i++)
+        {
+            var model = new MfgIdpDemoModel
+            {
+                BLineOrdDetails = new List<VBusbarLineOrderDetails>
+                {
+                    new VBusbarLineOrderDetails
+                    {
+                        OrderId = $"Order-{i}",
+                        CreatedOn = DateTime.UtcNow.ToString("o"),
+                        RequestedDeliveryDate = DateTime.UtcNow.AddDays(7).ToString("o"),
+                        RequiredQuantity = new Random().Next(1, 100),
+                        CustomerName = $"Customer-{i}",
+                        PlantLocation = $"Plant {(char)('A' + new Random().Next(0, 26))}",
+                        MaterialType = $"Type  {(char)('A' + new Random().Next(0, 26))}",
+                        Dimensions = $"{new Random().Next(10, 100)}x{new Random().Next(10, 100)}x{new Random().Next(10, 100)}",
+                        RequestedBy = $"User  {(char)('A' + new Random().Next(0, 26))}",
+                        DeliveredTo = $"Location  {(char)('A' + new Random().Next(0, 26))}",
+                        Priority = "High",
+                        Status = "Pending",
+                        JobId = $"Job-{i}",
+                        DueDate = DateTime.UtcNow.AddDays(5).ToString("o"),
+                        CompletionDate = DateTime.UtcNow.AddDays(10).ToString("o"),
+                        ProducedQuantity = new Random().Next(0, 100),
+                        Delivered = new Random().Next(0, 100),
+                        Rejected = new Random().Next(0, 10),
+                        RejectedWeight = $"{new Random().Next(0, 10)}kg"
+                    }
+                }
+            };
+            models.Add(model);
+        }
+        return models;
+    }
+    
 }
