@@ -1,3 +1,5 @@
+using System.Text.Json;
+using dotnet_console.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -15,9 +17,18 @@ public class PushDataHttpTrigger
     }
 
     [Function("PushDataHttpTrigger")]
-    public IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
     {
-        _logger.LogInformation("C# HTTP trigger function processed a request.");
-        return new OkObjectResult("test!");
+        //Adjust the path as needed
+        var jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "vBusbarLineOrderDetails.json");
+        if (!System.IO.File.Exists(jsonPath))
+        {
+            return new NotFoundObjectResult("JSON file not found.");
+        }
+
+        var json = await System.IO.File.ReadAllTextAsync(jsonPath);
+        var data = JsonSerializer.Deserialize<List<MfgIdpDemoModel>>(json);
+
+        return new OkObjectResult(data);
     }
 }
