@@ -34,38 +34,29 @@ public class PushDataHttpTrigger
     public static MfgIdpDemoModel GenerateRandomMfgIdpDemoModels(int count)
     {
         var mfgidpdemo=new MfgIdpDemoModel();
-        for (int i = 0; i < count; i++)
+        int i = 2;
+        mfgidpdemo.BLineOrdDetails.Add(new VBusbarLineOrderDetails
         {
-            // var model = new MfgIdpDemoModel
-            // {
-            mfgidpdemo.BLineOrdDetails.Add(
-                new VBusbarLineOrderDetails
-                {
-                    OrderId = $"Order-{i}",
-                    CreatedOn = DateTime.UtcNow.ToString("o"),
-                    RequestedDeliveryDate = DateTime.UtcNow.AddDays(7).ToString("o"),
-                    RequiredQuantity = new Random().Next(1, 100),
-                    CustomerName = $"Customer-{i}",
-                    PlantLocation = $"Plant {(char)('A' + new Random().Next(0, 26))}",
-                    MaterialType = $"Type  {(char)('A' + new Random().Next(0, 26))}",
-                    Dimensions = $"{new Random().Next(10, 100)}x{new Random().Next(10, 100)}x{new Random().Next(10, 100)}",
-                    RequestedBy = $"User  {(char)('A' + new Random().Next(0, 26))}",
-                    DeliveredTo = $"Location  {(char)('A' + new Random().Next(0, 26))}",
-                    Priority = "High",
-                    Status = "Pending",
-                    JobId = $"Job-{i}",
-                    DueDate = DateTime.UtcNow.AddDays(5).ToString("o"),
-                    CompletionDate = DateTime.UtcNow.AddDays(10).ToString("o"),
-                    ProducedQuantity = new Random().Next(0, 100),
-                    Delivered = new Random().Next(0, 100),
-                    Rejected = new Random().Next(0, 10),
-                    RejectedWeight = $"{new Random().Next(0, 10)}kg"
-                });
-                    
-               // }
-              //  };
-            //models.Add(model);
-        }
+            OrderId = $"Order-{i}",
+            CreatedOn = DateTime.UtcNow.ToString("o"),
+            RequestedDeliveryDate = DateTime.UtcNow.AddDays(7).ToString("o"),
+            RequiredQuantity = new Random().Next(1, 100),
+            CustomerName = $"Customer-{i}",
+            PlantLocation = $"Plant {(char)('A' + new Random().Next(0, 26))}",
+            MaterialType = $"Type  {(char)('A' + new Random().Next(0, 26))}",
+            Dimensions = $"{new Random().Next(10, 100)}x{new Random().Next(10, 100)}x{new Random().Next(10, 100)}",
+            RequestedBy = $"User  {(char)('A' + new Random().Next(0, 26))}",
+            DeliveredTo = $"Location  {(char)('A' + new Random().Next(0, 26))}",
+            Priority = "High",
+            Status = "Pending",
+            JobId = $"Job-{i}",
+            DueDate = DateTime.UtcNow.AddDays(5).ToString("o"),
+            CompletionDate = DateTime.UtcNow.AddDays(10).ToString("o"),
+            ProducedQuantity = new Random().Next(0, 100),
+            Delivered = new Random().Next(0, 100),
+            Rejected = new Random().Next(0, 10),
+            RejectedWeight = $"{new Random().Next(0, 10)}kg"
+        });
         return mfgidpdemo;
     }    
 }
