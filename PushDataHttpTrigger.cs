@@ -1,5 +1,6 @@
 using System.Text.Json;
 using dotnet_console.Model;
+using dotnet_console.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -28,11 +29,16 @@ public class PushDataHttpTrigger
 
         // var json = await System.IO.File.ReadAllTextAsync(jsonPath);
         // //var data = JsonSerializer.Deserialize<GenerateRandomMfgIdpDemoModels(10)>(json);
-
-        return new OkObjectResult(GenerateRandomMfgIdpDemoModels(10));
+        var temp = new SqlClientService("account=IRYGDUY-YE19703;user=NETHAJI;password=my_password;db=MFGIDPDEMO;schema=MFGIDPDEMOSCHEMA");
+        var selectQuery = "select * from MFGIDPDEMOTBL"; // Replace with your actual table name
+        var parameters = new Dictionary<string, object>(); // Add parameters if needed
+        var data = temp.Read(selectQuery, parameters);
+        //return new OkObjectResult(GenerateRandomMfgIdpDemoModels(10));
+        return new OkObjectResult(data);
     }
     public static MfgIdpDemoModel GenerateRandomMfgIdpDemoModels(int count)
     {
+       
         //int i = 5;
         var model = new MfgIdpDemoModel();
         model.BLineOrdDetails = new List<VBusbarLineOrderDetails>();
