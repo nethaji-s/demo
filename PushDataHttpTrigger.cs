@@ -20,7 +20,7 @@ public class PushDataHttpTrigger
     [Function("PushDataHttpTrigger")]
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
     {
-        string connectionString = "account=IRYGDUY-YE19703;user=NETHAJI;password=my_password;db=MFGIDPDEMO;schema=MFGIDPDEMOSCHEMA";
+        string connectionString = "account=IRYGDUY-YE19703;user=NETHAJI;password=2010PECmc098@@;db=MFGIDPDEMO;schema=MFGIDPDEMOSCHEMA";
         string status;
         try
         {
