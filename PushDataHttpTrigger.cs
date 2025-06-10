@@ -40,7 +40,7 @@ public class PushDataHttpTrigger
         {
             var tmp = new VBusbarLineOrderDetails
             {
-                OrderId = $"Order-{i}",
+                OrderId = i,
                 CreatedOn = DateTime.UtcNow.ToString("o"),
                 RequestedDeliveryDate = DateTime.UtcNow.AddDays(7).ToString("o"),
                 RequiredQuantity = new Random().Next(1, 100),

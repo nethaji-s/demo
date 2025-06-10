@@ -11,7 +11,7 @@ namespace dotnet_console.Model
     public class VBusbarLineOrderDetails
     {
         [JsonProperty("Order Id")]
-        public string OrderId { get; set; }
+        public int OrderId { get; set; }
 
         [JsonProperty("Created On")]
         public string CreatedOn { get; set; }
