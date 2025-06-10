@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using Snowflake.Data.Client;
 
 namespace mfgidpdemo.Function;
 
@@ -20,20 +21,20 @@ public class PushDataHttpTrigger
     [Function("PushDataHttpTrigger")]
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
     {
-        string connectionString = "account=IRYGDUY-YE19703;user=NETHAJI;password=2010PECmc098@@;db=MFGIDPDEMO;schema=MFGIDPDEMOSCHEMA";
+        string connectionString = "account=IRYGDUY-YE19703;user=NETHAJI;password=my_password;db=MFGIDPDEMO;schema=MFGIDPDEMOSCHEMA";
         string status;
         try
         {
-            using (var temp = new SqlClientService(connectionString))
+            using (var conn = new SnowflakeDbConnection())
             {
-                status = temp != null && temp.GetType().GetProperty("_connection", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                    .GetValue(temp) is System.Data.SqlClient.SqlConnection conn && conn.State == System.Data.ConnectionState.Open
-                    ? "Connection Opened Successfully" : "Connection Failed";
+                conn.ConnectionString = connectionString;
+                await conn.OpenAsync();
+                status = conn.State == System.Data.ConnectionState.Open ? "Snowflake Connection Opened Successfully" : "Snowflake Connection Failed";
             }
         }
         catch (Exception ex)
         {
-            status = $"Connection Failed: {ex.Message}";
+            status = $"Snowflake Connection Failed: {ex.Message}";
         }
         return new OkObjectResult(new { SqlConnectionStatus = status });
     }
