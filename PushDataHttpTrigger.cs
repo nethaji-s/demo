@@ -20,21 +20,22 @@ public class PushDataHttpTrigger
     [Function("PushDataHttpTrigger")]
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
     {
-        //Adjust the path as needed
-        // var jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "vBusbarLineOrderDetails.json");
-        // if (!System.IO.File.Exists(jsonPath))
-        // {
-        //     return new NotFoundObjectResult("JSON file not found.");
-        // }
-
-        // var json = await System.IO.File.ReadAllTextAsync(jsonPath);
-        // //var data = JsonSerializer.Deserialize<GenerateRandomMfgIdpDemoModels(10)>(json);
-        var temp = new SqlClientService("account=IRYGDUY-YE19703;user=NETHAJI;password=my_password;db=MFGIDPDEMO;schema=MFGIDPDEMOSCHEMA");
-        var selectQuery = "select * from MFGIDPDEMOTBL"; // Replace with your actual table name
-        var parameters = new Dictionary<string, object>(); // Add parameters if needed
-        var data = temp.Read(selectQuery, parameters);
-        //return new OkObjectResult(GenerateRandomMfgIdpDemoModels(10));
-        return new OkObjectResult(data);
+        string connectionString = "account=IRYGDUY-YE19703;user=NETHAJI;password=my_password;db=MFGIDPDEMO;schema=MFGIDPDEMOSCHEMA";
+        string status;
+        try
+        {
+            using (var temp = new SqlClientService(connectionString))
+            {
+                status = temp != null && temp.GetType().GetProperty("_connection", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                    .GetValue(temp) is System.Data.SqlClient.SqlConnection conn && conn.State == System.Data.ConnectionState.Open
+                    ? "Connection Opened Successfully" : "Connection Failed";
+            }
+        }
+        catch (Exception ex)
+        {
+            status = $"Connection Failed: {ex.Message}";
+        }
+        return new OkObjectResult(new { SqlConnectionStatus = status });
     }
     public static MfgIdpDemoModel GenerateRandomMfgIdpDemoModels(int count)
     {
